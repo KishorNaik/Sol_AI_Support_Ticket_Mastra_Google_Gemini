@@ -1,0 +1,1 @@
+# Sol_AI_Support_Ticket_Mastra_Google_Gemini
