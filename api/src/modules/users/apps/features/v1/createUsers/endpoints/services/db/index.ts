@@ -4,4 +4,3 @@ export interface ICreateUserDbServiceParameters{
   user:UserEntity
   queryRunner:QueryRunner;
 }
-
