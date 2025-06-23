@@ -1,5 +1,6 @@
 import { App } from '@/app';
 import { ValidateEnv, runNodeCluster } from '@kishornaik/utils';
+import { initializeDatabase } from '@kishornaik/db';
 import { modulesFederation } from './modules/app.Module';
 import { bullMqRunner } from './shared/utils/helpers/bullMq';
 import { rabbitMQRunner } from './shared/utils/helpers/rabbitmq';
@@ -9,7 +10,7 @@ import { pusherRunner } from './shared/utils/helpers/pusher';
 ValidateEnv();
 
 const setDatabase = (): Promise<void> => {
-	console.log('initializeDatabase Function');
+	initializeDatabase();
 	return Promise.resolve();
 };
 
