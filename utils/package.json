@@ -3,6 +3,7 @@
 	"version": "1.0.1",
 	"description": "",
 	"main": "dist/core/index.js",
+	"types": "dist/core/index.d.ts",
 	"type": "commonjs",
 	"scripts": {
 		"start": "cross-env NODE_ENV=production node dist/core/index.js",
