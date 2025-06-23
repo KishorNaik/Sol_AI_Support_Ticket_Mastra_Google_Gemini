@@ -55,6 +55,7 @@
 		"ts-node": "^10.9.2",
 		"ts-node-dev": "^2.0.0",
 		"tsconfig-paths": "^4.2.0",
+		"typeorm": "^0.3.25",
 		"typescript": "^5.8.3"
 	},
 	"dependencies": {
