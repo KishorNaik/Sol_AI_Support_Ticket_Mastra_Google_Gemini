@@ -10,7 +10,7 @@ import {
 	ResultError,
 	Service,
 	StatusCodes,
-  StatusEnum,
+	StatusEnum,
 } from '@kishornaik/utils';
 
 export interface IDeleteService<TInput, TOutput> {
