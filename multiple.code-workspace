@@ -1,18 +1,23 @@
 {
 	"folders": [
 		{
+			"name": "Sol_AI_Support_Ticket_Mastra_Google_Gemini",
 			"path": "."
 		},
 		{
-			"path": "api"
-		},
-		{
+			"name": "utils",
 			"path": "utils"
 		},
 		{
+			"name": "db",
 			"path": "db"
 		},
 		{
+			"name": "api",
+			"path": "api"
+		},
+		{
+			"name": "ai-agent",
 			"path": "ai-agent"
 		}
 	]
