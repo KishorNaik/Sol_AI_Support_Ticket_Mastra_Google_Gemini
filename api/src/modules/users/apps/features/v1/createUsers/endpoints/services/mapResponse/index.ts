@@ -8,6 +8,7 @@ import {
 	sealed,
 	Service,
 	StatusCodes,
+	tryCatchResultAsync,
 } from '@kishornaik/utils';
 import { CreateUsersResponseDto } from '../../../contracts';
 
@@ -17,10 +18,8 @@ export interface ICreateMapResponseService
 @sealed
 @Service()
 export class CreateMapResponseService implements ICreateMapResponseService {
-	public async handleAsync(
-		params: UserEntity
-	): Promise<Result<CreateUsersResponseDto, ResultError>> {
-		try {
+	public handleAsync(params: UserEntity): Promise<Result<CreateUsersResponseDto, ResultError>> {
+		return tryCatchResultAsync(async () => {
 			// Guard
 			if (!params)
 				return ResultExceptionFactory.error(
@@ -32,9 +31,6 @@ export class CreateMapResponseService implements ICreateMapResponseService {
 			const response = new CreateUsersResponseDto();
 			response.identifier = params.identifier;
 			return new Ok(response);
-		} catch (ex) {
-			const error = ex as Error;
-			return ResultExceptionFactory.error(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
-		}
+		});
 	}
 }

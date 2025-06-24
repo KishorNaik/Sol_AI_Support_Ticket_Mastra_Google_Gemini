@@ -8,6 +8,7 @@ import {
 	Service,
 	StatusCodes,
 	StatusEnum,
+	tryCatchResultAsync,
 } from '@kishornaik/utils';
 import { CreateUsersRequestDto } from '../../../contracts';
 import { UserEntity } from '@kishornaik/db';
@@ -19,10 +20,8 @@ export interface ICreateUserMapEntityService
 @sealed
 @Service()
 export class CreateUserMapEntityService implements ICreateUserMapEntityService {
-	public async handleAsync(
-		params: CreateUsersRequestDto
-	): Promise<Result<UserEntity, ResultError>> {
-		try {
+	public handleAsync(params: CreateUsersRequestDto): Promise<Result<UserEntity, ResultError>> {
+		return tryCatchResultAsync(async () => {
 			// Guard
 			if (!params)
 				return ResultExceptionFactory.error(
@@ -40,9 +39,6 @@ export class CreateUserMapEntityService implements ICreateUserMapEntityService {
 			user.modified_date = new Date();
 
 			return new Ok(user);
-		} catch (ex) {
-			const error = ex as Error;
-			return ResultExceptionFactory.error(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
-		}
+		});
 	}
 }

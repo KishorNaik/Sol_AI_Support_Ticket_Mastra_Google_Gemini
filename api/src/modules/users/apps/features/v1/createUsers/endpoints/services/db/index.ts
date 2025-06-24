@@ -10,6 +10,7 @@ import {
 	sealed,
 	Service,
 	StatusCodes,
+	tryCatchResultAsync,
 } from '@kishornaik/utils';
 
 Container.set<AddUserDbService>(AddUserDbService, new AddUserDbService());
@@ -30,10 +31,10 @@ export class CreateUserDbService implements ICreateUserDbService {
 	public constructor() {
 		this._addUserDbService = Container.get<AddUserDbService>(AddUserDbService);
 	}
-	public async handleAsync(
+	public handleAsync(
 		params: ICreateUserDbServiceParameters
 	): Promise<Result<UserEntity, ResultError>> {
-		try {
+		return tryCatchResultAsync(async () => {
 			// Guard
 			if (!params)
 				return ResultExceptionFactory.error(
@@ -66,9 +67,6 @@ export class CreateUserDbService implements ICreateUserDbService {
 			}
 
 			return new Ok(user.value);
-		} catch (ex) {
-			const error = ex as Error;
-			return ResultExceptionFactory.error(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
-		}
+		});
 	}
 }

@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
-import { Get, HttpCode, JsonController, OnUndefined, Param, Res } from "routing-controllers";
-import { OpenAPI } from "routing-controllers-openapi";
+import { Get, HttpCode, JsonController, OnUndefined, Param, Res } from 'routing-controllers';
+import { OpenAPI } from 'routing-controllers-openapi';
 import {
 	RequestData,
 	sealed,
@@ -26,106 +26,126 @@ import { mediator } from '@/shared/utils/helpers/medaitR';
 @JsonController('/api/v1/users')
 @OpenAPI({ tags: ['users'] })
 export class GetUserByEmailIdEndpoint {
-  @Get('/:email')
-  @OpenAPI({ summary: `get user by identifier`, tags: ['users'] })
+	@Get('/:email')
+	@OpenAPI({ summary: `get user by identifier`, tags: ['users'] })
 	@HttpCode(StatusCodes.OK)
 	@OnUndefined(StatusCodes.NOT_FOUND)
 	@OnUndefined(StatusCodes.BAD_REQUEST)
-  async getUserByEmailId(@Param('email') email: string,@Res() res: Response) {
-    const request=new GetUserByEmailIdRequestDto();
-    request.emailId=email;
+	async getUserByEmailId(@Param('email') email: string, @Res() res: Response) {
+		const request = new GetUserByEmailIdRequestDto();
+		request.emailId = email;
 
-    const response = await mediator.send(new GetUserByEmailQuery(request));
-    return res.status(response.StatusCode).json(response);
-  }
+		const response = await mediator.send(new GetUserByEmailQuery(request));
+		return res.status(response.StatusCode).json(response);
+	}
 }
 // #endregion
 
 // #region Query
 @sealed
-class GetUserByEmailQuery extends RequestData<ApiDataResponse<GetUserByEmailIdResponseDto>>{
-  private readonly _request:GetUserByEmailIdRequestDto;
+class GetUserByEmailQuery extends RequestData<ApiDataResponse<GetUserByEmailIdResponseDto>> {
+	private readonly _request: GetUserByEmailIdRequestDto;
 
-  public constructor(request:GetUserByEmailIdRequestDto) {
-    super();
-    this._request = request;
-  }
+	public constructor(request: GetUserByEmailIdRequestDto) {
+		super();
+		this._request = request;
+	}
 
-  public get request(): GetUserByEmailIdRequestDto {
-    return this._request;
-  }
+	public get request(): GetUserByEmailIdRequestDto {
+		return this._request;
+	}
 }
 // #endregion
 
 // #region Query Handler
 @sealed
 @requestHandler(GetUserByEmailQuery)
-class GetUserByEmailQueryHandler implements RequestHandler<GetUserByEmailQuery,ApiDataResponse<GetUserByEmailIdResponseDto>>{
+class GetUserByEmailQueryHandler
+	implements RequestHandler<GetUserByEmailQuery, ApiDataResponse<GetUserByEmailIdResponseDto>>
+{
+	private pipeline = new PipelineWorkflow(logger);
+	private readonly _getUserByEmailIdValidationService: GetUserByEmailIdValidationService;
+	private readonly _getUserByEmailMapEntityService: GetUserByEmailMapEntityService;
+	private readonly _getUserByEmailIdDbQueryService: GetUserByEmailIdDbQueryService;
+	private readonly _getUserByEmailIdMapResponseService: GetUserByEmailIdMapResponseService;
 
-  private pipeline = new PipelineWorkflow(logger);
-  private readonly _getUserByEmailIdValidationService:GetUserByEmailIdValidationService;
-  private readonly _getUserByEmailMapEntityService:GetUserByEmailMapEntityService;
-  private readonly _getUserByEmailIdDbQueryService:GetUserByEmailIdDbQueryService;
-  private readonly _getUserByEmailIdMapResponseService:GetUserByEmailIdMapResponseService;
+	public constructor() {
+		this._getUserByEmailIdValidationService = Container.get(GetUserByEmailIdValidationService);
+		this._getUserByEmailMapEntityService = Container.get(GetUserByEmailMapEntityService);
+		this._getUserByEmailIdDbQueryService = Container.get(GetUserByEmailIdDbQueryService);
+		this._getUserByEmailIdMapResponseService = Container.get(
+			GetUserByEmailIdMapResponseService
+		);
+	}
 
-  public constructor(){
-    this._getUserByEmailIdValidationService=Container.get(GetUserByEmailIdValidationService);
-    this._getUserByEmailMapEntityService=Container.get(GetUserByEmailMapEntityService);
-    this._getUserByEmailIdDbQueryService=Container.get(GetUserByEmailIdDbQueryService);
-    this._getUserByEmailIdMapResponseService=Container.get(GetUserByEmailIdMapResponseService);
-  }
-
-  public async handle(value: GetUserByEmailQuery): Promise<ApiDataResponse<GetUserByEmailIdResponseDto>> {
-    const queryRunner = getQueryRunner();
+	public async handle(
+		value: GetUserByEmailQuery
+	): Promise<ApiDataResponse<GetUserByEmailIdResponseDto>> {
+		const queryRunner = getQueryRunner();
 		await queryRunner.connect();
-    try
-    {
-      // Guard
-      if(!value)
-        return DataResponseFactory.error(StatusCodes.BAD_REQUEST,`Value is required`);
+		try {
+			// Guard
+			if (!value)
+				return DataResponseFactory.error(StatusCodes.BAD_REQUEST, `Value is required`);
 
-      if(!value.request)
-        return DataResponseFactory.error(StatusCodes.BAD_REQUEST,`Request is required`);
+			if (!value.request)
+				return DataResponseFactory.error(StatusCodes.BAD_REQUEST, `Request is required`);
 
-      const {request}=value;
+			const { request } = value;
 
-      await queryRunner.startTransaction();
+			await queryRunner.startTransaction();
 
-      // Validation Service
-      await this.pipeline.step(`GetUserByEmailIdEndpoint:Validation Service pipeline`,async()=>{
-        const result=await this._getUserByEmailIdValidationService.handleAsync({
-          dto:request,
-          dtoClass:GetUserByEmailIdRequestDto
-        });
-        return result;
-      });
+			// Validation Service
+			await this.pipeline.step(
+				`GetUserByEmailIdEndpoint:Validation Service pipeline`,
+				async () => {
+					const result = await this._getUserByEmailIdValidationService.handleAsync({
+						dto: request,
+						dtoClass: GetUserByEmailIdRequestDto,
+					});
+					return result;
+				}
+			);
 
-      // Map Service
-      const mapResult:GetUserByEmailIdDbDto=await this.pipeline.step(`GetUserByEmailIdEndpoint:Map Service pipeline`,async()=>{
-        const result=await this._getUserByEmailMapEntityService.handleAsync(request);
-        return result;
-      });
+			// Map Service
+			const mapResult: GetUserByEmailIdDbDto = await this.pipeline.step(
+				`GetUserByEmailIdEndpoint:Map Service pipeline`,
+				async () => {
+					const result = await this._getUserByEmailMapEntityService.handleAsync(request);
+					return result;
+				}
+			);
 
-      // Db Query Service
-      const userDbResult:UserEntity=await this.pipeline.step(`GetUserByEmailIdEndpoint:Db Query Service pipeline`,async()=>{
-        const result=await this._getUserByEmailIdDbQueryService.handleAsync({
-          user:mapResult,
-          queryRunner:queryRunner
-        });
-        return result;
-      });
+			// Db Query Service
+			const userDbResult: UserEntity = await this.pipeline.step(
+				`GetUserByEmailIdEndpoint:Db Query Service pipeline`,
+				async () => {
+					const result = await this._getUserByEmailIdDbQueryService.handleAsync({
+						user: mapResult,
+						queryRunner: queryRunner,
+					});
+					return result;
+				}
+			);
 
-      // Response Service
-      const response=await this.pipeline.step(`GetUserByEmailIdEndpoint:Response Service pipeline`,async()=>{
-        const result=await this._getUserByEmailIdMapResponseService.handleAsync(userDbResult);
-        return result;
-      });
+			// Response Service
+			const response = await this.pipeline.step(
+				`GetUserByEmailIdEndpoint:Response Service pipeline`,
+				async () => {
+					const result =
+						await this._getUserByEmailIdMapResponseService.handleAsync(userDbResult);
+					return result;
+				}
+			);
 
-      await queryRunner.commitTransaction();
+			await queryRunner.commitTransaction();
 
-      return DataResponseFactory.success(StatusCodes.OK,response,`User retrieved successfully`);
-    }
-    catch (ex) {
+			return DataResponseFactory.success(
+				StatusCodes.OK,
+				response,
+				`User retrieved successfully`
+			);
+		} catch (ex) {
 			const error = ex as Error | PipelineWorkflowException;
 
 			if (error instanceof PipelineWorkflowException) {
@@ -139,6 +159,6 @@ class GetUserByEmailQueryHandler implements RequestHandler<GetUserByEmailQuery,A
 		} finally {
 			await queryRunner.release();
 		}
-  }
+	}
 }
 // #endregion
