@@ -66,7 +66,7 @@ class CreateUserCommand extends RequestData<ApiDataResponse<CreateUsersResponseD
 class CreateUserCommandHandler
 	implements RequestHandler<CreateUserCommand, ApiDataResponse<CreateUsersResponseDto>>
 {
-	private createUserPipeline = new PipelineWorkflow(logger);
+	private pipeline = new PipelineWorkflow(logger);
 	private readonly _createUserMapEntityService: CreateUserMapEntityService;
 	private readonly _createUserDbService: CreateUserDbService;
 	private readonly _createMapResponseService: CreateMapResponseService;
@@ -87,7 +87,7 @@ class CreateUserCommandHandler
 			const { request } = value;
 
 			// Map Entity Service:; Pipeline Workflow
-			const userMapResult = await this.createUserPipeline.step(
+			const userMapResult = await this.pipeline.step(
 				`CreateUserEndpoint:Map User Entity pipeline`,
 				async () => {
 					const result = await this._createUserMapEntityService.handleAsync(request);
@@ -97,7 +97,7 @@ class CreateUserCommandHandler
 
 			await queryRunner.startTransaction();
 			// Add User Db Service Pipeline
-			const dbUserResult = await this.createUserPipeline.step(
+			const dbUserResult = await this.pipeline.step(
 				`CreateUserEndpoint:Add User Db pipeline`,
 				async () => {
 					const result = await this._createUserDbService.handleAsync({
@@ -109,7 +109,7 @@ class CreateUserCommandHandler
 			);
 
 			// Response Service Pipeline
-			const response = await this.createUserPipeline.step(
+			const response = await this.pipeline.step(
 				`CreateUserEndpoint:Map Response pipeline`,
 				async () => {
 					const result = await this._createMapResponseService.handleAsync(dbUserResult);
