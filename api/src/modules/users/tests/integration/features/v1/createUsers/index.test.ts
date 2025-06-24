@@ -1,11 +1,11 @@
-import { describe, it } from "node:test";
+import { describe, it } from 'node:test';
 import request from 'supertest';
 import expect from 'expect';
-import { App } from "@/app";
-import { modulesFederation } from "@/modules/app.Module";
-import { CreateUsersRequestDto } from "@/modules/users/apps/features/v1/createUsers";
-import { destroyDatabase, initializeDatabase } from "@kishornaik/db";
-import { ValidateEnv } from "@kishornaik/utils";
+import { App } from '@/app';
+import { modulesFederation } from '@/modules/app.Module';
+import { CreateUsersRequestDto } from '@/modules/users/apps/features/v1/createUsers';
+import { destroyDatabase, initializeDatabase } from '@kishornaik/db';
+import { ValidateEnv } from '@kishornaik/utils';
 
 process.env.NODE_ENV = 'development';
 ValidateEnv();
@@ -13,52 +13,49 @@ ValidateEnv();
 const appInstance = new App([...modulesFederation]);
 const app = appInstance.getServer();
 
+describe(`Create-User-Integration-Test`, () => {
+	//node --trace-deprecation --test --test-name-pattern='should_return_false_when_validation_service_failed' --require ts-node/register -r tsconfig-paths/register ./src/modules/users/tests/integration/features/v1/createUsers/index.test.ts
+	it(`should_return_false_when_validation_service_failed`, async () => {
+		await initializeDatabase();
 
-describe(`Create-User-Integration-Test`,()=>{
+		const requestBody = new CreateUsersRequestDto();
+		requestBody.fullName = '';
+		requestBody.email = '';
 
-  //node --trace-deprecation --test --test-name-pattern='should_return_false_when_validation_service_failed' --require ts-node/register -r tsconfig-paths/register ./src/modules/users/tests/integration/features/v1/createUsers/index.test.ts
-  it(`should_return_false_when_validation_service_failed`,async()=>{
-    await initializeDatabase();
+		const response = await request(app).post('/api/v1/users').send(requestBody);
+		expect(response.body.Success).toBe(false);
+		expect(response.statusCode).toBe(400);
 
-    const requestBody=new CreateUsersRequestDto();
-    requestBody.fullName='';
-    requestBody.email='';
+		await destroyDatabase();
+	});
 
-    const response = await request(app).post('/api/v1/users').send(requestBody);
-    expect(response.body.Success).toBe(false);
-    expect(response.statusCode).toBe(400);
+	//node --trace-deprecation --test --test-name-pattern='should_return_false_when_user_already_exists' --require ts-node/register -r tsconfig-paths/register ./src/modules/users/tests/integration/features/v1/createUsers/index.test.ts
+	it(`should_return_false_when_user_already_exists`, async () => {
+		await initializeDatabase();
 
-    await destroyDatabase();
-  });
+		const requestBody = new CreateUsersRequestDto();
+		requestBody.fullName = `John Doe`;
+		requestBody.email = 'john.doe@example.com';
 
-  //node --trace-deprecation --test --test-name-pattern='should_return_false_when_user_already_exists' --require ts-node/register -r tsconfig-paths/register ./src/modules/users/tests/integration/features/v1/createUsers/index.test.ts
-  it(`should_return_false_when_user_already_exists`,async()=>{
-    await initializeDatabase();
+		const response = await request(app).post('/api/v1/users').send(requestBody);
+		expect(response.body.Success).toBe(false);
+		expect(response.statusCode).toBe(409);
 
-    const requestBody=new CreateUsersRequestDto();
-    requestBody.fullName=`John Doe`;
-    requestBody.email='john.doe@example.com';
+		await destroyDatabase();
+	});
 
-    const response = await request(app).post('/api/v1/users').send(requestBody);
-    expect(response.body.Success).toBe(false);
-    expect(response.statusCode).toBe(409);
+	//node --trace-deprecation --test --test-name-pattern='should_return_true_when_user_created_successfully' --require ts-node/register -r tsconfig-paths/register ./src/modules/users/tests/integration/features/v1/createUsers/index.test.ts
+	it(`should_return_true_when_user_created_successfully`, async () => {
+		await initializeDatabase();
 
-    await destroyDatabase();
-  });
+		const requestBody = new CreateUsersRequestDto();
+		requestBody.fullName = `Mary Doe`;
+		requestBody.email = 'mary.doe@example.com';
 
-  //node --trace-deprecation --test --test-name-pattern='should_return_true_when_user_created_successfully' --require ts-node/register -r tsconfig-paths/register ./src/modules/users/tests/integration/features/v1/createUsers/index.test.ts
-  it(`should_return_true_when_user_created_successfully`,async()=>{
-    await initializeDatabase();
+		const response = await request(app).post('/api/v1/users').send(requestBody);
+		expect(response.body.Success).toBe(true);
+		expect(response.statusCode).toBe(201);
 
-    const requestBody=new CreateUsersRequestDto();
-    requestBody.fullName=`Mary Doe`;
-    requestBody.email='mary.doe@example.com';
-
-    const response = await request(app).post('/api/v1/users').send(requestBody);
-    expect(response.body.Success).toBe(true);
-    expect(response.statusCode).toBe(201);
-
-    await destroyDatabase();
-  });
-
+		await destroyDatabase();
+	});
 });

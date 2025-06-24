@@ -1,37 +1,48 @@
-import { IServiceHandlerAsync,Ok,Result,ResultError,ResultExceptionFactory,sealed, Service, StatusCodes, StatusEnum } from "@kishornaik/utils";
-import { CreateUsersRequestDto } from "../../../contracts";
-import { UserEntity } from "@kishornaik/db";
-import { randomUUID } from "crypto";
+import {
+	IServiceHandlerAsync,
+	Ok,
+	Result,
+	ResultError,
+	ResultExceptionFactory,
+	sealed,
+	Service,
+	StatusCodes,
+	StatusEnum,
+} from '@kishornaik/utils';
+import { CreateUsersRequestDto } from '../../../contracts';
+import { UserEntity } from '@kishornaik/db';
+import { randomUUID } from 'crypto';
 
-export interface ICreateUserMapEntityService extends IServiceHandlerAsync<CreateUsersRequestDto,UserEntity>{
-
-}
+export interface ICreateUserMapEntityService
+	extends IServiceHandlerAsync<CreateUsersRequestDto, UserEntity> {}
 
 @sealed
 @Service()
 export class CreateUserMapEntityService implements ICreateUserMapEntityService {
-  public async handleAsync(params: CreateUsersRequestDto): Promise<Result<UserEntity, ResultError>> {
-    try
-    {
-      // Guard
-      if (!params)
-        return ResultExceptionFactory.error(StatusCodes.BAD_REQUEST, "Request parameters are required.");
+	public async handleAsync(
+		params: CreateUsersRequestDto
+	): Promise<Result<UserEntity, ResultError>> {
+		try {
+			// Guard
+			if (!params)
+				return ResultExceptionFactory.error(
+					StatusCodes.BAD_REQUEST,
+					'Request parameters are required.'
+				);
 
-      // Map Entity
-      const user=new UserEntity();
-      user.identifier=randomUUID().toString();
-      user.status=StatusEnum.ACTIVE;
-      user.fullName=params.fullName;
-      user.email=params.email;
-      user.created_date=new Date();
-      user.modified_date=new Date();
+			// Map Entity
+			const user = new UserEntity();
+			user.identifier = randomUUID().toString();
+			user.status = StatusEnum.ACTIVE;
+			user.fullName = params.fullName;
+			user.email = params.email;
+			user.created_date = new Date();
+			user.modified_date = new Date();
 
-      return new Ok(user);
-    }
-    catch(ex){
-      const error=ex as Error;
-      return ResultExceptionFactory.error(StatusCodes.INTERNAL_SERVER_ERROR,error.message);
-    }
-  }
-
+			return new Ok(user);
+		} catch (ex) {
+			const error = ex as Error;
+			return ResultExceptionFactory.error(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+		}
+	}
 }
