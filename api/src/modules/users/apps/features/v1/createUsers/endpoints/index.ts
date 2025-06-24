@@ -8,7 +8,7 @@ import {
 	Res,
 	UseBefore,
 } from 'routing-controllers';
-import { getQueryParams, OpenAPI } from 'routing-controllers-openapi';
+import { OpenAPI } from 'routing-controllers-openapi';
 import { ValidationMiddleware } from '@/middlewares/security/validations';
 import {
 	RequestData,
@@ -27,8 +27,10 @@ import { mediator } from '@/shared/utils/helpers/medaitR';
 import { getQueryRunner } from '@kishornaik/db';
 import { logger } from '@/shared/utils/helpers/loggers';
 import { CreateUserMapEntityService } from './services/mapEntity';
+import { CreateUserDbService } from './services/db';
+import { CreateMapResponseService } from './services/mapResponse';
 
-@JsonController(`api/v1/users`)
+@JsonController(`/api/v1/users`)
 @OpenAPI({ tags: [`users`] })
 export class CreateUserEndpoint {
 	@Post()
@@ -65,9 +67,13 @@ class CreateUserCommandHandler implements RequestHandler<CreateUserCommand,ApiDa
 
   private createUserPipeline=new PipelineWorkflow(logger);
   private readonly _createUserMapEntityService:CreateUserMapEntityService;
+  private readonly _createUserDbService:CreateUserDbService;
+  private readonly _createMapResponseService:CreateMapResponseService;
 
   public constructor(){
     this._createUserMapEntityService=Container.get(CreateUserMapEntityService);
+    this._createUserDbService=Container.get(CreateUserDbService);
+    this._createMapResponseService=Container.get(CreateMapResponseService);
   }
 
   public async handle(value: CreateUserCommand): Promise<ApiDataResponse<CreateUsersResponseDto>> {
@@ -76,19 +82,34 @@ class CreateUserCommandHandler implements RequestHandler<CreateUserCommand,ApiDa
 
     try
     {
-
       const {request}=value;
 
       // Map Entity Service:; Pipeline Workflow
-      const  mapEntityResult=await this.createUserPipeline.step(`Map User Entity pipeline`, async () => {
+      const userMapResult=await this.createUserPipeline.step(`CreateUserEndpoint:Map User Entity pipeline`, async () => {
         const result=await this._createUserMapEntityService.handleAsync(request);
         return result;
       });
 
       await queryRunner.startTransaction();
-      // Add User Db Service
+      // Add User Db Service Pipeline
+      const dbUserResult=await this.createUserPipeline.step(`CreateUserEndpoint:Add User Db pipeline`,async ()=>{
+        const result=await this._createUserDbService.handleAsync({
+          user:userMapResult,
+          queryRunner:queryRunner
+        });
+        return result;
+      });
 
-      // Response Service
+      // Response Service Pipeline
+      const response=await this.createUserPipeline.step(`CreateUserEndpoint:Map Response pipeline`,async ()=>{
+        const result=await this._createMapResponseService.handleAsync(
+          dbUserResult,
+        );
+        return result;
+      });
+      await queryRunner.commitTransaction();
+
+      return DataResponseFactory.success(StatusCodes.CREATED,response,`User created successfully`);
     }
     catch(ex){
       const error= ex as Error| PipelineWorkflowException;
