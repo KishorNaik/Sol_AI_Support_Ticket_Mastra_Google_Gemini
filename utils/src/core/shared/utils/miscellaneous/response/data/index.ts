@@ -52,10 +52,10 @@ export class DataResponseFactory {
 		};
 	}
 
-	public static async pipelineError(
+	public static async pipelineError<TData>(
 		error: Error | PipelineWorkflowException,
 		queryRunner?: QueryRunner
-	) {
+	): Promise<DataResponse<TData>> {
 		if (error instanceof PipelineWorkflowException) {
 			if (queryRunner?.isTransactionActive) {
 				await queryRunner.rollbackTransaction();
