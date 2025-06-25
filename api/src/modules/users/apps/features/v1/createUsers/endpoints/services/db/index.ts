@@ -6,7 +6,7 @@ import {
 	Ok,
 	Result,
 	ResultError,
-	ResultExceptionFactory,
+	ResultFactory,
 	sealed,
 	Service,
 	StatusCodes,
@@ -37,36 +37,27 @@ export class CreateUserDbService implements ICreateUserDbService {
 		return tryCatchResultAsync(async () => {
 			// Guard
 			if (!params)
-				return ResultExceptionFactory.error(
-					StatusCodes.BAD_REQUEST,
-					`Parameters are required`
-				);
+				return ResultFactory.error(StatusCodes.BAD_REQUEST, `Parameters are required`);
 
 			if (!params.user)
-				return ResultExceptionFactory.error(
-					StatusCodes.BAD_REQUEST,
-					`User entity is required`
-				);
+				return ResultFactory.error(StatusCodes.BAD_REQUEST, `User entity is required`);
 
 			if (!params.queryRunner)
-				return ResultExceptionFactory.error(
-					StatusCodes.BAD_REQUEST,
-					`QueryRunner is required`
-				);
+				return ResultFactory.error(StatusCodes.BAD_REQUEST, `QueryRunner is required`);
 
 			const user = await this._addUserDbService.handleAsync(params.user, params.queryRunner);
 			if (user.isErr()) {
 				const error = user.error;
 				if (error.message.includes(`duplicate key value violates unique constraint`)) {
-					return ResultExceptionFactory.error(
+					return ResultFactory.error(
 						StatusCodes.CONFLICT,
 						`User with this email already exists`
 					);
 				}
-				return ResultExceptionFactory.error(error.statusCode, error.message);
+				return ResultFactory.error(error.statusCode, error.message);
 			}
 
-			return new Ok(user.value);
+			return ResultFactory.success(user.value);
 		});
 	}
 }

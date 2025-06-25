@@ -4,7 +4,7 @@ import {
 	Ok,
 	Result,
 	ResultError,
-	ResultExceptionFactory,
+	ResultFactory,
 	sealed,
 	Service,
 	StatusCodes,
@@ -22,15 +22,12 @@ export class CreateMapResponseService implements ICreateMapResponseService {
 		return tryCatchResultAsync(async () => {
 			// Guard
 			if (!params)
-				return ResultExceptionFactory.error(
-					StatusCodes.BAD_REQUEST,
-					'User entity is required.'
-				);
+				return ResultFactory.error(StatusCodes.BAD_REQUEST, 'User entity is required.');
 
 			// Map Response
 			const response = new CreateUsersResponseDto();
 			response.identifier = params.identifier;
-			return new Ok(response);
+			return ResultFactory.success(response);
 		});
 	}
 }

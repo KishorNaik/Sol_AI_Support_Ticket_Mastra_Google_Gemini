@@ -16,7 +16,7 @@ export function authorizeRole(role: string) {
 		const roleFromToken = userProviderService.getUserRole(req);
 
 		if (roleFromToken !== role) {
-			const response = DataResponseFactory.Response<undefined>(
+			const response = DataResponseFactory.response<undefined>(
 				false,
 				403,
 				undefined,

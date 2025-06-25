@@ -3,7 +3,7 @@ import {
 	Ok,
 	Result,
 	ResultError,
-	ResultExceptionFactory,
+	ResultFactory,
 	sealed,
 	Service,
 	StatusCodes,
@@ -24,7 +24,7 @@ export class CreateUserMapEntityService implements ICreateUserMapEntityService {
 		return tryCatchResultAsync(async () => {
 			// Guard
 			if (!params)
-				return ResultExceptionFactory.error(
+				return ResultFactory.error(
 					StatusCodes.BAD_REQUEST,
 					'Request parameters are required.'
 				);
@@ -38,7 +38,7 @@ export class CreateUserMapEntityService implements ICreateUserMapEntityService {
 			user.created_date = new Date();
 			user.modified_date = new Date();
 
-			return new Ok(user);
+			return ResultFactory.success(user);
 		});
 	}
 }

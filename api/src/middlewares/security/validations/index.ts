@@ -29,7 +29,7 @@ export const ValidationMiddleware = (
 				const message = errors
 					.map((error: ValidationError) => Object.values(error.constraints))
 					.join(', ');
-				const dataResponse = DataResponseFactory.Response(false, 400, undefined, message);
+				const dataResponse = DataResponseFactory.response(false, 400, undefined, message);
 				next(dataResponse);
 			});
 	};

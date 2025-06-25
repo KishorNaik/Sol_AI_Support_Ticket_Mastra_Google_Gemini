@@ -17,7 +17,7 @@ export class HttpExceptionFactory {
 		errorMessage: string,
 		statusCode: StatusCodes
 	): DataResponse<TResult> {
-		return DataResponseFactory.Response<TResult>(false, statusCode, undefined, errorMessage);
+		return DataResponseFactory.response<TResult>(false, statusCode, undefined, errorMessage);
 	}
 }
 
@@ -29,7 +29,7 @@ export class QueryException {
 		errorMessage: string,
 		statusCode: StatusCodes
 	): DataResponse<TResult> {
-		return DataResponseFactory.Response<TResult>(false, statusCode, undefined, errorMessage);
+		return DataResponseFactory.response<TResult>(false, statusCode, undefined, errorMessage);
 	}
 }
 
@@ -41,6 +41,6 @@ export class CommandException {
 		errorMessage: string,
 		statusCode: StatusCodes
 	): DataResponse<TResult> {
-		return DataResponseFactory.Response<TResult>(false, statusCode, undefined, errorMessage);
+		return DataResponseFactory.response<TResult>(false, statusCode, undefined, errorMessage);
 	}
 }

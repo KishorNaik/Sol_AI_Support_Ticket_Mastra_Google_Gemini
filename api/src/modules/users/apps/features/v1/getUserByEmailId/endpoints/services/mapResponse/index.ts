@@ -4,7 +4,7 @@ import {
 	Ok,
 	Result,
 	ResultError,
-	ResultExceptionFactory,
+	ResultFactory,
 	sealed,
 	Service,
 	StatusCodes,
@@ -24,10 +24,7 @@ export class GetUserByEmailIdMapResponseService implements IGetUserByEmailIdMapR
 		return tryCatchResultAsync(async () => {
 			// Guard
 			if (!params)
-				return ResultExceptionFactory.error(
-					StatusCodes.BAD_REQUEST,
-					'User entity is required.'
-				);
+				return ResultFactory.error(StatusCodes.BAD_REQUEST, 'User entity is required.');
 
 			// Map
 			const response = new GetUserByEmailIdResponseDto();
@@ -35,7 +32,7 @@ export class GetUserByEmailIdMapResponseService implements IGetUserByEmailIdMapR
 			response.email = params.email;
 			response.fullName = params.fullName;
 
-			return new Ok(response);
+			return ResultFactory.success(response);
 		});
 	}
 }

@@ -7,7 +7,7 @@ export const rateLimitMiddleware = rateLimit({
 	windowMs: parseInt(GLOBAL_WINDOW_MINUTES) * 60 * 1000, // 15 minutes
 	max: parseInt(RATE_LIMITER),
 	handler: (req: Request, res: Response) => {
-		const response = DataResponseFactory.Response(
+		const response = DataResponseFactory.response(
 			false,
 			StatusCodes.TOO_MANY_REQUESTS,
 			null!,

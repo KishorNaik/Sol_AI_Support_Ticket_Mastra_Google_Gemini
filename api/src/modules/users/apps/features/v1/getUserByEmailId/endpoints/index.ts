@@ -146,16 +146,7 @@ class GetUserByEmailQueryHandler
 				`User retrieved successfully`
 			);
 		} catch (ex) {
-			const error = ex as Error | PipelineWorkflowException;
-
-			if (error instanceof PipelineWorkflowException) {
-				if (queryRunner.isTransactionActive) {
-					await queryRunner.rollbackTransaction();
-				}
-				return DataResponseFactory.error(error.statusCode, error.message);
-			}
-
-			return DataResponseFactory.error(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+			return await DataResponseFactory.pipelineError(ex, queryRunner);
 		} finally {
 			await queryRunner.release();
 		}

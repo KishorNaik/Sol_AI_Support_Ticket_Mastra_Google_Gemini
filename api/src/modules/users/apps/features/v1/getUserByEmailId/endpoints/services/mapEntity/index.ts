@@ -3,7 +3,7 @@ import {
 	Ok,
 	Result,
 	ResultError,
-	ResultExceptionFactory,
+	ResultFactory,
 	sealed,
 	Service,
 	StatusCodes,
@@ -24,7 +24,7 @@ export class GetUserByEmailMapEntityService implements IGetUserByEmailMapEntityS
 		return tryCatchResultAsync(async () => {
 			// Guard
 			if (!params)
-				return ResultExceptionFactory.error(
+				return ResultFactory.error(
 					StatusCodes.BAD_REQUEST,
 					'Request parameters are required'
 				);
@@ -33,7 +33,7 @@ export class GetUserByEmailMapEntityService implements IGetUserByEmailMapEntityS
 			const map: GetUserByEmailIdDbDto = new GetUserByEmailIdDbDto();
 			map.email = params.emailId;
 
-			return new Ok(map);
+			return ResultFactory.success(map);
 		});
 	}
 }

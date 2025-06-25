@@ -1,5 +1,12 @@
 import { logConstruct, logger } from '@/shared/utils/helpers/loggers';
-import { DataResponseFactory, Ok, Result, ResultError, compareHmac } from '@kishornaik/utils';
+import {
+	DataResponseFactory,
+	Ok,
+	Result,
+	ResultError,
+	ResultFactory,
+	compareHmac,
+} from '@kishornaik/utils';
 import express, { Request, Response, NextFunction } from 'express';
 
 export async function authenticateHmac(req: Request, res: Response, next: NextFunction) {
@@ -18,7 +25,7 @@ export async function authenticateHmac(req: Request, res: Response, next: NextFu
 				`Forbidden - You do not have permission to access this resource: Client Id is required`
 			)
 		);
-		const response = DataResponseFactory.Response<undefined>(
+		const response = DataResponseFactory.response<undefined>(
 			false,
 			403,
 			undefined,
@@ -35,7 +42,7 @@ export async function authenticateHmac(req: Request, res: Response, next: NextFu
 				`Forbidden - You do not have permission to access this resource: receivedSignature is required`
 			)
 		);
-		const response = DataResponseFactory.Response<undefined>(
+		const response = DataResponseFactory.response<undefined>(
 			false,
 			403,
 			undefined,
@@ -54,7 +61,7 @@ export async function authenticateHmac(req: Request, res: Response, next: NextFu
 			)
 		);
 
-		const response = DataResponseFactory.Response<undefined>(
+		const response = DataResponseFactory.response<undefined>(
 			false,
 			403,
 			undefined,
@@ -75,7 +82,7 @@ export async function authenticateHmac(req: Request, res: Response, next: NextFu
 			)
 		);
 
-		const response = DataResponseFactory.Response<undefined>(
+		const response = DataResponseFactory.response<undefined>(
 			false,
 			403,
 			undefined,
@@ -106,5 +113,5 @@ const getSecretKeyFromDatabaseAsync = async (
 	const secretKey: string = getUsersByClientIdServiceResult.value.keys.hmacSecretKey;
 	return new Ok(secretKey);
   */
-	return new Ok('secret');
+	return ResultFactory.success('ok');
 };

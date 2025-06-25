@@ -5,7 +5,7 @@ import {
 	QueryRunner,
 	Result,
 	ResultError,
-	ResultExceptionFactory,
+	ResultFactory,
 	sealed,
 	Service,
 	StatusCodes,
@@ -37,19 +37,16 @@ export class GetUserByEmailIdDbQueryService implements IGetUserByEmailIdDbQueryS
 		return tryCatchResultAsync(async () => {
 			// Guard
 			if (!params)
-				return ResultExceptionFactory.error(
+				return ResultFactory.error(
 					StatusCodes.BAD_REQUEST,
 					'Request parameters are required'
 				);
 
 			if (!params.user)
-				return ResultExceptionFactory.error(StatusCodes.BAD_REQUEST, 'User is required');
+				return ResultFactory.error(StatusCodes.BAD_REQUEST, 'User is required');
 
 			if (!params.queryRunner)
-				return ResultExceptionFactory.error(
-					StatusCodes.BAD_REQUEST,
-					'QueryRunner is required'
-				);
+				return ResultFactory.error(StatusCodes.BAD_REQUEST, 'QueryRunner is required');
 
 			const { user, queryRunner } = params;
 

@@ -1,4 +1,4 @@
-import { Container, DtoValidation, Err, IDtoValidation, IServiceHandlerAsync, Ok, QueryRunner, Result, ResultError, ResultExceptionFactory, sealed, Service, StatusCodes, StatusEnum } from "@kishornaik/utils";
+import { Container, DtoValidation, Err, IDtoValidation, IServiceHandlerAsync, Ok, QueryRunner, Result, ResultError, ResultFactory, sealed, Service, StatusCodes, StatusEnum } from "@kishornaik/utils";
 import { UserEntity } from "../../../../users.Module";
 import { dbDataSource } from "../../../../../../config/dbSource";
 import { IsEmail, IsNotEmpty } from "class-validator";
@@ -34,19 +34,19 @@ export class GetUserByEmailDbService implements IGetUserByEmailIdDbService{
     {
       // Guard
       if (!params)
-        return ResultExceptionFactory.error(
+        return ResultFactory.error(
           StatusCodes.BAD_REQUEST,
           'Parameters are required'
         );
 
       if(!params.queryRunner)
-        return ResultExceptionFactory.error(
+        return ResultFactory.error(
           StatusCodes.BAD_REQUEST,
           'QueryRunner is required'
         );
 
       if(!params.user)
-        return ResultExceptionFactory.error(
+        return ResultFactory.error(
           StatusCodes.BAD_REQUEST,
           'User is required'
         );
@@ -58,7 +58,7 @@ export class GetUserByEmailDbService implements IGetUserByEmailIdDbService{
 				dto: user,
 				dtoClass: (user as any).constructor,
 			});
-			if (validationResult.isErr()) return ResultExceptionFactory.error(StatusCodes.BAD_REQUEST,validationResult.error.message);
+			if (validationResult.isErr()) return ResultFactory.error(StatusCodes.BAD_REQUEST,validationResult.error.message);
 
       // Run Query Runner
 			const entityManager = params.queryRunner
@@ -73,7 +73,7 @@ export class GetUserByEmailDbService implements IGetUserByEmailIdDbService{
         .getOne();
 
       if (!userEntity) {
-        return ResultExceptionFactory.error(
+        return ResultFactory.error(
           StatusCodes.NOT_FOUND,
           'User not found'
         );
@@ -83,7 +83,7 @@ export class GetUserByEmailDbService implements IGetUserByEmailIdDbService{
     }
     catch(ex){
       const error=ex as Error;
-      return ResultExceptionFactory.error(StatusCodes.INTERNAL_SERVER_ERROR,error.message);
+      return ResultFactory.error(StatusCodes.INTERNAL_SERVER_ERROR,error.message);
     }
   }
 
