@@ -84,6 +84,13 @@ class CreateUserCommandHandler
 		await queryRunner.connect();
 
 		try {
+      // Guard
+      if (!value)
+        return DataResponseFactory.error(StatusCodes.BAD_REQUEST, `Value is required`);
+
+      if (!value.request)
+        return DataResponseFactory.error(StatusCodes.BAD_REQUEST, `Request is required`);
+
 			const { request } = value;
 
 			// Map Entity Service:; Pipeline Workflow
