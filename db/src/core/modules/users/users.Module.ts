@@ -7,3 +7,4 @@ export const userModuleDbDataSourceRegisterEntity: Function[] = [UserEntity];
 export * from './infrastructure/entity/users/index';
 export * from './apps/features/v1/addUsers/index';
 export * from './apps/features/v1/getUserByEmail/index';
+export * from "./apps/features/v1/updateUsers/index";
