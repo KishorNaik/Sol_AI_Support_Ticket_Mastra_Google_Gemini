@@ -12,7 +12,7 @@ export class ResultFactory {
 		message: string,
 		stackTrace?: string
 	): Result<T, ResultError> {
-		return new Err(new ResultError(statusCode, message));
+		return new Err(new ResultError(statusCode, message, stackTrace));
 	}
 
 	public static errorInstance<T>(resultError: ResultError): Result<T, ResultError> {

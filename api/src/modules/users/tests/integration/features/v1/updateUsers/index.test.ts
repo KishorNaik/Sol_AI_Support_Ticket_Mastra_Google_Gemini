@@ -15,13 +15,12 @@ const appInstance = new App([...modulesFederation]);
 const app = appInstance.getServer();
 
 describe(`Update-User-Integration-Test`, () => {
-
-  //node --trace-deprecation --test --test-name-pattern='should_return_false_when_validation_service_failed' --require ts-node/register -r tsconfig-paths/register ./src/modules/users/tests/integration/features/v1/updateUsers/index.test.ts
+	//node --trace-deprecation --test --test-name-pattern='should_return_false_when_validation_service_failed' --require ts-node/register -r tsconfig-paths/register ./src/modules/users/tests/integration/features/v1/updateUsers/index.test.ts
 	it(`should_return_false_when_validation_service_failed`, async () => {
 		await initializeDatabase();
 
 		const requestBody = new UpdateUserRequestDto();
-    requestBody.identifier=``;
+		requestBody.identifier = ``;
 		requestBody.fullName = '';
 		requestBody.email = '';
 
@@ -32,12 +31,12 @@ describe(`Update-User-Integration-Test`, () => {
 		await destroyDatabase();
 	});
 
-  //node --trace-deprecation --test --test-name-pattern='should_return_false_when_user_already_exists' --require ts-node/register -r tsconfig-paths/register ./src/modules/users/tests/integration/features/v1/updateUsers/index.test.ts
+	//node --trace-deprecation --test --test-name-pattern='should_return_false_when_user_already_exists' --require ts-node/register -r tsconfig-paths/register ./src/modules/users/tests/integration/features/v1/updateUsers/index.test.ts
 	it(`should_return_false_when_user_already_exists`, async () => {
 		await initializeDatabase();
 
 		const requestBody = new UpdateUserRequestDto();
-    requestBody.identifier=`79414171-f556-4ce0-9a2e-f16ad5f6bc9f`;
+		requestBody.identifier = `79414171-f556-4ce0-9a2e-f16ad5f6bc9f`;
 		requestBody.fullName = 'Jon Doe';
 		requestBody.email = 'mary.doe@example.com';
 
@@ -48,12 +47,12 @@ describe(`Update-User-Integration-Test`, () => {
 		await destroyDatabase();
 	});
 
-  //node --trace-deprecation --test --test-name-pattern='should_return_true_when_user_updated' --require ts-node/register -r tsconfig-paths/register ./src/modules/users/tests/integration/features/v1/updateUsers/index.test.ts
+	//node --trace-deprecation --test --test-name-pattern='should_return_true_when_user_updated' --require ts-node/register -r tsconfig-paths/register ./src/modules/users/tests/integration/features/v1/updateUsers/index.test.ts
 	it(`should_return_true_when_user_updated`, async () => {
 		await initializeDatabase();
 
 		const requestBody = new UpdateUserRequestDto();
-    requestBody.identifier=`79414171-f556-4ce0-9a2e-f16ad5f6bc9f`;
+		requestBody.identifier = `79414171-f556-4ce0-9a2e-f16ad5f6bc9f`;
 		requestBody.fullName = 'Jon Doe';
 		requestBody.email = 'jon.doe@example.com';
 
