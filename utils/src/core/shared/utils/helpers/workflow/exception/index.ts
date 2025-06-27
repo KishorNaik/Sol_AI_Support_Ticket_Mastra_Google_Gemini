@@ -18,16 +18,16 @@ export class PipelineWorkflowException extends Error {
 		this._success = success;
 		this._statusCode = statusCode;
 		// Preserve original stack trace if provided
-    if (stack) {
-      Object.defineProperty(this, 'stack', {
-        value: stack,
-        writable: false,
-        configurable: true
-      });
-    } else {
-      // Fallback to native stack generation
-      Error.captureStackTrace(this, PipelineWorkflowException);
-    }
+		if (stack) {
+			Object.defineProperty(this, 'stack', {
+				value: stack,
+				writable: false,
+				configurable: true,
+			});
+		} else {
+			// Fallback to native stack generation
+			Error.captureStackTrace(this, PipelineWorkflowException);
+		}
 	}
 
 	public get statusCode(): StatusCodes {
