@@ -78,8 +78,8 @@ class RemoveUserCommand extends RequestData<ApiDataResponse<RemoveUserResponseDt
 enum RemoveUserSteps {
   ValidationService = `RemoveUserCommandHandler:Validation Service`,
 	MapEntityService = `RemoveUserCommandHandler:Map Entity Service`,
-	DbService = `UpdateUserCommandHandler:Db Service`,
-	MapResponseService = `UpdateUserCommandHandler:Map Response Service`,
+	DbService = `RemoveUserCommandHandler::Db Service`,
+	MapResponseService = `RemoveUserCommandHandler:Map Response Service`,
 }
 
 // #region Command Handler
