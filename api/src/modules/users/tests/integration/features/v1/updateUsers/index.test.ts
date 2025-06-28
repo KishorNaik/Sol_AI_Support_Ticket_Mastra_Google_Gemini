@@ -1,7 +1,6 @@
 import { describe, it } from 'node:test';
 import request from 'supertest';
 import expect from 'expect';
-
 import { App } from '@/app';
 import { modulesFederation } from '@/modules/app.Module';
 import { destroyDatabase, initializeDatabase } from '@kishornaik/db';

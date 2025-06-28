@@ -58,6 +58,9 @@ export class UpdateService<T extends object> implements IUpdateService<T, T> {
 				.where('identifier  = :identifier ', {
 					identifier: (params as any).identifier,
 				})
+        .andWhere('status = :status', {
+          status: (params as any).status,
+        })
 				.execute();
 
 			// Check if insert is successfully
