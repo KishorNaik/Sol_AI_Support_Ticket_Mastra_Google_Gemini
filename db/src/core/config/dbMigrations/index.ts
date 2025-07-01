@@ -1,6 +1,7 @@
 import { DataSource, DataSourceOptions } from '@kishornaik/utils';
 import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USERNAME } from '../env';
 import { UserEntity } from '../../modules/users/users.Module';
+import { ProgrammingLanguageEntity } from '../../modules/languages/infrastructure/entity/programmingLanguage';
 
 /*
     Generate:
@@ -17,7 +18,7 @@ const connectionOptions: DataSourceOptions = {
 	database: DB_DATABASE,
 	synchronize: false,
 	logging: true,
-	entities: [UserEntity],
+	entities: [UserEntity,ProgrammingLanguageEntity],
 	subscribers: [],
 	migrations: ['src/core/config/dbMigrations/migrations/**/*.ts'],
 	migrationsTableName: 'custom_migration_table',
