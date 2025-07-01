@@ -57,6 +57,7 @@ export class DataResponseFactory {
 		queryRunner?: QueryRunner
 	): Promise<DataResponse<TData>> {
 		if (queryRunner?.isTransactionActive) {
+      console.log(`queryRunner.isTransactionActive: ${queryRunner.isTransactionActive}`);
 			await queryRunner.rollbackTransaction();
 		}
 

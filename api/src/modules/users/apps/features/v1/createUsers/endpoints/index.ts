@@ -48,6 +48,7 @@ export class CreateUserEndpoint {
 	}
 }
 
+@sealed
 class CreateUserCommand extends RequestData<ApiDataResponse<CreateUsersResponseDto>> {
 	private readonly _request: CreateUsersRequestDto;
 
@@ -131,7 +132,7 @@ class CreateUserCommandHandler
 				`User created successfully`
 			);
 		} catch (ex) {
-			return DataResponseFactory.pipelineError(ex, queryRunner);
+			return await DataResponseFactory.pipelineError(ex, queryRunner);
 		} finally {
 			await queryRunner.release();
 		}

@@ -37,8 +37,8 @@ export class UpdateUserMapEntityService implements IUpdateUserMapEntityService {
 			userEntity.created_date = new Date();
 			userEntity.modified_date = new Date();
 
-      //throw new Error('Not implemented');
-      //return ResultFactory.success(undefined);
+			//throw new Error('Not implemented');
+			//return ResultFactory.success(undefined);
 
 			return ResultFactory.success(userEntity);
 		});
