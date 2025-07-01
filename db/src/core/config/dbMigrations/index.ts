@@ -18,7 +18,7 @@ const connectionOptions: DataSourceOptions = {
 	database: DB_DATABASE,
 	synchronize: false,
 	logging: true,
-	entities: [UserEntity,ProgrammingLanguageEntity],
+	entities: [UserEntity, ProgrammingLanguageEntity],
 	subscribers: [],
 	migrations: ['src/core/config/dbMigrations/migrations/**/*.ts'],
 	migrationsTableName: 'custom_migration_table',

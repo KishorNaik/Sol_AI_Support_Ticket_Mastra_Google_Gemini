@@ -60,9 +60,9 @@ export class DeleteService<T extends object> implements IDeleteService<T, T> {
 				.where('identifier  = :identifier ', {
 					identifier: (params as any).identifier,
 				})
-        .andWhere('status = :status', {
-          status: (params as any).status,
-        })
+				.andWhere('status = :status', {
+					status: (params as any).status,
+				})
 				.execute();
 
 			// Check if insert is successfully

@@ -7,7 +7,10 @@ import {
 	initializeDatabase,
 } from '../../../../../../config/dbSource';
 import { randomUUID } from 'crypto';
-import { AddProgrammingLanguageDbService, ProgrammingLanguageEntity } from '../../../../language.Module';
+import {
+	AddProgrammingLanguageDbService,
+	ProgrammingLanguageEntity,
+} from '../../../../language.Module';
 
 // Debug Mode:All Test Case Run
 //node --trace-deprecation --test --require ts-node/register -r tsconfig-paths/register ./src/core/modules/languages/tests/features/v1/addLanguage/index.test.ts
@@ -18,9 +21,8 @@ import { AddProgrammingLanguageDbService, ProgrammingLanguageEntity } from '../.
 // If Debug not Worked then use
 //node --trace-deprecation --test --test-name-pattern='test_name' --require ts-node/register --inspect=4321 -r tsconfig-paths/register ./src/core/modules/languages/tests/features/v1/addLanguage/index.test.ts
 
-describe(`Add-Language-Unit-Test`,()=>{
-
-  let queryRunner: QueryRunner;
+describe(`Add-Language-Unit-Test`, () => {
+	let queryRunner: QueryRunner;
 
 	beforeEach(async () => {
 		await initializeDatabase();
@@ -32,10 +34,10 @@ describe(`Add-Language-Unit-Test`,()=>{
 		await destroyDatabase();
 	});
 
-  // node --trace-deprecation --test --test-name-pattern='should_return_false_when_language_entity_identifier_is_not_provided' --require ts-node/register -r tsconfig-paths/register ./src/core/modules/languages/tests/features/v1/addLanguage/index.test.ts
+	// node --trace-deprecation --test --test-name-pattern='should_return_false_when_language_entity_identifier_is_not_provided' --require ts-node/register -r tsconfig-paths/register ./src/core/modules/languages/tests/features/v1/addLanguage/index.test.ts
 	test(`should_return_false_when_language_entity_identifier_is_not_provided`, async () => {
-		const entity:ProgrammingLanguageEntity=new ProgrammingLanguageEntity();
-    entity.name='c';
+		const entity: ProgrammingLanguageEntity = new ProgrammingLanguageEntity();
+		entity.name = 'c';
 
 		await queryRunner.startTransaction();
 
@@ -52,11 +54,11 @@ describe(`Add-Language-Unit-Test`,()=>{
 		expect(result.isOk()).toBe(false);
 	});
 
-  // node --trace-deprecation --test --test-name-pattern='should_return_false_when_language_entity_status_is_not_provided' --require ts-node/register -r tsconfig-paths/register ./src/core/modules/languages/tests/features/v1/addLanguage/index.test.ts
+	// node --trace-deprecation --test --test-name-pattern='should_return_false_when_language_entity_status_is_not_provided' --require ts-node/register -r tsconfig-paths/register ./src/core/modules/languages/tests/features/v1/addLanguage/index.test.ts
 	test(`should_return_false_when_language_entity_status_is_not_provided`, async () => {
-		const entity:ProgrammingLanguageEntity=new ProgrammingLanguageEntity();
-    entity.identifier=randomUUID().toString();
-    entity.name='c';
+		const entity: ProgrammingLanguageEntity = new ProgrammingLanguageEntity();
+		entity.identifier = randomUUID().toString();
+		entity.name = 'c';
 
 		await queryRunner.startTransaction();
 
@@ -73,12 +75,12 @@ describe(`Add-Language-Unit-Test`,()=>{
 		expect(result.isOk()).toBe(false);
 	});
 
-  // node --trace-deprecation --test --test-name-pattern='should_return_false_when_validation_service_failed' --require ts-node/register -r tsconfig-paths/register ./src/core/modules/languages/tests/features/v1/addLanguage/index.test.ts
+	// node --trace-deprecation --test --test-name-pattern='should_return_false_when_validation_service_failed' --require ts-node/register -r tsconfig-paths/register ./src/core/modules/languages/tests/features/v1/addLanguage/index.test.ts
 	test(`should_return_false_when_validation_service_failed`, async () => {
-		const entity:ProgrammingLanguageEntity=new ProgrammingLanguageEntity();
-    entity.identifier=randomUUID().toString();
-    entity.status=StatusEnum.ACTIVE;
-    entity.name='';
+		const entity: ProgrammingLanguageEntity = new ProgrammingLanguageEntity();
+		entity.identifier = randomUUID().toString();
+		entity.status = StatusEnum.ACTIVE;
+		entity.name = '';
 
 		await queryRunner.startTransaction();
 
@@ -95,12 +97,12 @@ describe(`Add-Language-Unit-Test`,()=>{
 		expect(result.isOk()).toBe(false);
 	});
 
-  // node --trace-deprecation --test --test-name-pattern='should_return_true_when_all_services_pass' --require ts-node/register -r tsconfig-paths/register ./src/core/modules/languages/tests/features/v1/addLanguage/index.test.ts
+	// node --trace-deprecation --test --test-name-pattern='should_return_true_when_all_services_pass' --require ts-node/register -r tsconfig-paths/register ./src/core/modules/languages/tests/features/v1/addLanguage/index.test.ts
 	test(`should_return_true_when_all_services_pass`, async () => {
-		const entity:ProgrammingLanguageEntity=new ProgrammingLanguageEntity();
-    entity.identifier=randomUUID().toString();
-    entity.status=StatusEnum.ACTIVE;
-    entity.name='c';
+		const entity: ProgrammingLanguageEntity = new ProgrammingLanguageEntity();
+		entity.identifier = randomUUID().toString();
+		entity.status = StatusEnum.ACTIVE;
+		entity.name = 'c';
 
 		await queryRunner.startTransaction();
 
@@ -117,12 +119,12 @@ describe(`Add-Language-Unit-Test`,()=>{
 		expect(result.isOk()).toBe(true);
 	});
 
-  // node --trace-deprecation --test --test-name-pattern='should_return_false_when_language_already_exist' --require ts-node/register -r tsconfig-paths/register ./src/core/modules/languages/tests/features/v1/addLanguage/index.test.ts
+	// node --trace-deprecation --test --test-name-pattern='should_return_false_when_language_already_exist' --require ts-node/register -r tsconfig-paths/register ./src/core/modules/languages/tests/features/v1/addLanguage/index.test.ts
 	test(`should_return_false_when_language_already_exist`, async () => {
-		const entity:ProgrammingLanguageEntity=new ProgrammingLanguageEntity();
-    entity.identifier=randomUUID().toString();
-    entity.status=StatusEnum.ACTIVE;
-    entity.name='c';
+		const entity: ProgrammingLanguageEntity = new ProgrammingLanguageEntity();
+		entity.identifier = randomUUID().toString();
+		entity.status = StatusEnum.ACTIVE;
+		entity.name = 'c';
 
 		await queryRunner.startTransaction();
 
@@ -138,5 +140,4 @@ describe(`Add-Language-Unit-Test`,()=>{
 		await queryRunner.commitTransaction();
 		expect(result.isOk()).toBe(false);
 	});
-
 });

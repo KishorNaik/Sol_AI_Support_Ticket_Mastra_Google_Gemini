@@ -12,7 +12,10 @@ export const dbDataSource = new DataSource({
 	database: DB_DATABASE,
 	synchronize: false,
 	logging: true,
-	entities: [...userModuleDbDataSourceRegisterEntity,...languageModuleDbDataSourceRegisterEntity],
+	entities: [
+		...userModuleDbDataSourceRegisterEntity,
+		...languageModuleDbDataSourceRegisterEntity,
+	],
 	subscribers: [],
 	migrations: ['src/migration/**/*.ts'],
 });
