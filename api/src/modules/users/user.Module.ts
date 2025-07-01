@@ -7,5 +7,5 @@ export const userModules: Function[] = [
 	CreateUserEndpoint,
 	GetUserByEmailIdEndpoint,
 	UpdateUserEndpoint,
-  RemoveUserEndpoint
+	RemoveUserEndpoint,
 ];

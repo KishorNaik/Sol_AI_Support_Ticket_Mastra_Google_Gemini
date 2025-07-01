@@ -3,8 +3,8 @@ import { Type } from 'class-transformer';
 import { IsEmail, IsNotEmpty, IsString, IsUUID, Length } from 'class-validator';
 
 // #region Request Dto
-export class RemoveUserRequestDto{
-  @IsNotEmpty()
+export class RemoveUserRequestDto {
+	@IsNotEmpty()
 	@IsUUID()
 	@IsSafeString({ message: 'identifier must not contain HTML or JavaScript code' })
 	public identifier?: string;
@@ -12,7 +12,7 @@ export class RemoveUserRequestDto{
 // #endregion
 
 // #region Response Dto
-export class RemoveUserResponseDto{
-  public identifier?: string;
+export class RemoveUserResponseDto {
+	public identifier?: string;
 }
 // #endregion

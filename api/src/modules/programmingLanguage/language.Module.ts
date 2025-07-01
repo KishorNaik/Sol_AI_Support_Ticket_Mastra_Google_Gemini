@@ -1,5 +1,3 @@
-import { CreateProgrammingLanguageEndpoint } from "./apps/features/v1/createLanguage";
+import { CreateProgrammingLanguageEndpoint } from './apps/features/v1/createLanguage';
 
-export const programmingLanguageModule: Function[] = [
-  CreateProgrammingLanguageEndpoint
-];
+export const programmingLanguageModule: Function[] = [CreateProgrammingLanguageEndpoint];
