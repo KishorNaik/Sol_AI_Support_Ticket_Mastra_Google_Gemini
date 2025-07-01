@@ -43,7 +43,7 @@ describe(`Create-Programming-Language-Integration-Test`, () => {
 		await destroyDatabase();
 	});
 
-  //node --trace-deprecation --test --test-name-pattern='should_return_true_when_all_services_are_passed' --require ts-node/register -r tsconfig-paths/register ./src/modules/programmingLanguage/tests/integration/features/v1/createLanguage/index.test.ts
+	//node --trace-deprecation --test --test-name-pattern='should_return_true_when_all_services_are_passed' --require ts-node/register -r tsconfig-paths/register ./src/modules/programmingLanguage/tests/integration/features/v1/createLanguage/index.test.ts
 	it(`should_return_true_when_all_services_are_passed`, async () => {
 		await initializeDatabase();
 
