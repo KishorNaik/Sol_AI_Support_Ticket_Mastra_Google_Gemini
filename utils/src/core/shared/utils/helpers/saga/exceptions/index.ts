@@ -1,23 +1,23 @@
 import { StatusCodes } from 'http-status-codes';
 
-export class PipelineWorkflowException extends Error {
+export class SagaExecutionException extends Error {
 	private readonly _stepName: string;
 	private readonly _statusCode: StatusCodes;
-	private readonly _success: boolean;
-	//private readonly _stack?: string | undefined;
+	private readonly _isCompensated: boolean;
+	private readonly _stack?: string;
 
 	constructor(
 		stepName: string,
-		success: boolean,
 		statusCode: StatusCodes,
 		message: string,
-		stack?: string | undefined
+		isCompensated: boolean,
+		stack?: string
 	) {
 		super(message);
 		this._stepName = stepName;
-		this._success = success;
 		this._statusCode = statusCode;
-		// Preserve original stack trace if provided
+		this._isCompensated = isCompensated;
+
 		if (stack) {
 			Object.defineProperty(this, 'stack', {
 				value: stack,
@@ -25,24 +25,23 @@ export class PipelineWorkflowException extends Error {
 				configurable: true,
 			});
 		} else {
-			// Fallback to native stack generation
-			Error.captureStackTrace(this, PipelineWorkflowException);
+			Error.captureStackTrace(this, SagaExecutionException);
 		}
+	}
+
+	public get stepName(): string {
+		return this._stepName;
 	}
 
 	public get statusCode(): StatusCodes {
 		return this._statusCode;
 	}
 
-	public get success(): boolean {
-		return this._success;
+	public get isCompensated(): boolean {
+		return this._isCompensated;
 	}
 
 	public override get stack(): string | undefined {
-		return super.stack;
-	}
-
-	public get stepName(): string {
-		return this._stepName;
+		return this._stack ?? super.stack;
 	}
 }
