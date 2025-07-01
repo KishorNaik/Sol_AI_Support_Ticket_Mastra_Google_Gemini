@@ -3,7 +3,7 @@ import { Type } from "class-transformer";
 import { IsNotEmpty, IsString } from "class-validator";
 
 // #region Request Dto
-export class LanguageRequestDto{
+export class CreateProgrammingLanguageRequestDto{
 
   @IsString()
   @IsNotEmpty()
@@ -14,7 +14,7 @@ export class LanguageRequestDto{
 // #endregion Request Dto
 
 // #region Response Dto
-export class LanguageResponseDto{
-  public name?:string;
+export class CreateProgrammingLanguageResponseDto{
+  public identifier?:string;
 }
 // #endregion

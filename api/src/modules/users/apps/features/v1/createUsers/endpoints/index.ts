@@ -48,6 +48,7 @@ export class CreateUserEndpoint {
 	}
 }
 
+@sealed
 class CreateUserCommand extends RequestData<ApiDataResponse<CreateUsersResponseDto>> {
 	private readonly _request: CreateUsersRequestDto;
 
