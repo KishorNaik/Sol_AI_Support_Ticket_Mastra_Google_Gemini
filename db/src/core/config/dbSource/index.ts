@@ -1,6 +1,7 @@
 import { DataSource, QueryRunner, SelectQueryBuilder } from '@kishornaik/utils';
 import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USERNAME } from '../env';
 import { userModuleDbDataSourceRegisterEntity } from '../../modules/users/users.Module';
+import { languageModuleDbDataSourceRegisterEntity } from '../../modules/app.Module';
 
 export const dbDataSource = new DataSource({
 	type: 'postgres',
@@ -11,7 +12,7 @@ export const dbDataSource = new DataSource({
 	database: DB_DATABASE,
 	synchronize: false,
 	logging: true,
-	entities: [...userModuleDbDataSourceRegisterEntity],
+	entities: [...userModuleDbDataSourceRegisterEntity,...languageModuleDbDataSourceRegisterEntity],
 	subscribers: [],
 	migrations: ['src/migration/**/*.ts'],
 });
