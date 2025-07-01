@@ -1,7 +1,7 @@
 import { DataSource, DataSourceOptions } from '@kishornaik/utils';
 import { DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USERNAME } from '../env';
 import { UserEntity } from '../../modules/users/users.Module';
-import { ProgrammingLanguageEntity } from '../../modules/languages/infrastructure/entity/programmingLanguag';
+import { ProgrammingLanguageEntity } from '../../modules/languages/infrastructure/entity/programmingLanguage';
 
 /*
     Generate:
